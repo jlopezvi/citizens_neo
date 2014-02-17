@@ -4,7 +4,7 @@ from flask import request
 from py2neo import neo4j
 import ast
 import json
-from communityManager import saveCommunity
+from communityManager import saveCommunity,deleteCommunity,addCommunityToContact,getCommunities
 from userManagement import deleteUser,getAllUsers,saveUser,addContactToUser,getContacts
 import logging
 
@@ -14,11 +14,21 @@ app = Flask(__name__)
 @app.route('/addUser', methods=['POST', 'OPTIONS'])
 #@crossdomain(origin='*', headers=['Content-Type'])
 def getUser():
-    saveUser(request.get_json())
+    return saveUser(request.get_json())
   
 @app.route('/addCommunity', methods=['POST', 'OPTIONS'])
 def addComunity():
-    saveCommunity(request.get_json())
+    return saveCommunity(request.get_json())
+
+@app.route('/addCommunityToUser/<string:name>/<string:email>', methods=['POST', 'OPTIONS'])
+def addCommunityToUser(name, email) :
+    addCommunityToContact(name, email)
+    return "Community %s was added to user with email %s" % (name, email)
+
+@app.route('/delete/community/<string:name>', methods=['DELETE', 'OPTIONS'])
+def removeCommunity(name):
+    deleteCommunity(name)
+    return "Community %s was successfully removed" % name
 
 @app.route('/deleteUser/<string:email>', methods=['DELETE', 'OPTIONS'])
 def removeUser(email) :
@@ -28,6 +38,10 @@ def removeUser(email) :
 @app.route('/getAllContactsForUser/<string:email>', methods=['GET', 'OPTIONS'])
 def getAllContacts(email) :
     return json.dumps(getContacts(email))
+
+@app.route('/getCommunitiesOfUser/<string:email>', methods=['GET','OPTIONS'])
+def getAllCommunitiesForUser(email):
+    return json.dumps(getCommunities(email))
 
 @app.route('/getUsers', methods=['GET','OPTIONS'])
 def getUsers():
@@ -39,9 +53,6 @@ def addContact(current, newContact) :
     addContactToUser(current, newContact)
     return "addContact was invoked"
 
-
-def getGraph() :
-    return neo4j.GraphDatabaseService("http://localhost:7474/db/data")
 
 if __name__ == '__main__':
     app.debug = True

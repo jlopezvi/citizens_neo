@@ -7,19 +7,17 @@ from utils import NotFoundError,getGraph
 def saveUser(user):
     email = user.get('email')
     try:
-        getUserByEmail(email)
-        app.logger.debug("user with email %s already exists" % email)
-        return "User with email %s already exists" % email
+       __getUserByEmail(email)
+       print "user was found"
+       return "User with email %s already exists" % email
     except NotFoundError as e:
-       newUser(user)
+       __newUser(user)
        return "User %s was successfully added" % email
 
-def newUser(userJson):
-    app.logger.debug("new user is being created..")
+def __newUser(userJson):
     email = userJson.get('email')
     newUser, = getGraph().create({"name" : userJson.get('name'), "surname" : userJson.get('surname'), "email" : email, "country" : userJson.get('country'), "city" : userJson.get('city')})
     __addToUsersIndex(email, newUser)
-    app.logger.debug("%s has just been added" % email)
 
 
 def deleteUser(email) :
