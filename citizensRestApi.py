@@ -6,6 +6,7 @@ import ast
 import json
 from communityManager import saveCommunity,deleteCommunity,addCommunityToContact,getCommunities
 from userManagement import deleteUser,getAllUsers,saveUser,addContactToUser,getContacts
+from concernManager import addConcernToUser,deleteConcern,getAllConcerns
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -53,6 +54,20 @@ def addContact(current, newContact) :
     addContactToUser(current, newContact)
     return "addContact was invoked"
 
+@app.route('/addConcern/<string:current>', methods=['POST', 'OPTIONS'])
+def addConcern(current) :
+    concern = request.get_json()
+    addConcernToUser(current, concern)
+
+@app.route('/deleteConcern/<string:idConcern>', methods=['POST', 'OPTIONS'])
+def deleteConcern(idConcern) :
+    print idConcern
+    deleteConcern(idConcern)
+
+@app.route('/getAllConcerns/<string:current>', methods=['GET', 'OPTIONS'])
+def getConcerns(current):
+    print current
+    json.dumps(getAllConcerns(current))
 
 if __name__ == '__main__':
     app.debug = True
