@@ -1,12 +1,11 @@
 from flask import Flask,jsonify,json
 from crossdomain import crossdomain
 from flask import request
-from py2neo import neo4j
 import ast
 import json
 from communityManager import saveCommunity,deleteCommunity,addCommunityToContact,getCommunities
 from userManagement import deleteUser,getAllUsers,saveUser,addContactToUser,getContacts
-from concernManager import addConcernToUser,deleteConcern,getAllConcerns
+from concernManager import addConcernToUser,deleteOneConcern,getAllConcerns
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -58,16 +57,19 @@ def addContact(current, newContact) :
 def addConcern(current) :
     concern = request.get_json()
     addConcernToUser(current, concern)
+    return "addConcern was invoked"
 
-@app.route('/deleteConcern/<string:idConcern>', methods=['POST', 'OPTIONS'])
+@app.route('/deleteConcern/<string:idConcern>', methods=['DELETE', 'OPTIONS'])
 def deleteConcern(idConcern) :
     print idConcern
-    deleteConcern(idConcern)
+    deleteOneConcern(idConcern)
+    return "deleteConcern was invoked"
 
-@app.route('/getAllConcerns/<string:current>', methods=['GET', 'OPTIONS'])
+@app.route('/getConcerns/<string:current>', methods=['GET', 'OPTIONS'])
 def getConcerns(current):
     print current
-    json.dumps(getAllConcerns(current))
+    return json.dumps(getAllConcerns(current))
+       
 
 if __name__ == '__main__':
     app.debug = True
