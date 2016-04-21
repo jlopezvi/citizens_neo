@@ -21,7 +21,7 @@ def getCommunities(email):
     communities = []
     for rel in rels:
         communities.append(rel.end_node.get_properties())
-        #print getGraph().node(rel.end_node)
+        #print (getGraph().node(rel.end_node))
     return communities
 
 def deleteCommunity(name):

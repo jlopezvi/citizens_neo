@@ -8,7 +8,7 @@ def saveUser(user):
     email = user.get('email')
     try:
        __getUserByEmail(email)
-       print "user was found"
+       print ("user was found")
        return "User with email %s already exists" % email
     except NotFoundError as e:
        __newUser(user)
@@ -51,7 +51,7 @@ def getContacts(email) :
     contacts = []
     for rel in rels:
         contacts.append(rel.end_node.get_properties())
-        #print getGraph().node(rel.end_node)
+        #print (getGraph().node(rel.end_node))
     return contacts
 
 

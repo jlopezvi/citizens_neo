@@ -20,11 +20,11 @@ def getConcernsIndex():
     
 def deleteOneConcern(id):
     concern = getGraph().node(id)
-    print concern[0]
+    print (concern[0])
     #getConcernsIndex().get("title", concern.get("title")).delete()
 
 def getAllConcerns(email):
-    print "getAllConcerns"
+    print ("getAllConcerns")
     currentUser = __getUserByEmail(email)
     rels = list(getGraph().match(start_node=currentUser, rel_type="CREATES"))
     concerns = []

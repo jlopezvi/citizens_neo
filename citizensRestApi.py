@@ -84,13 +84,13 @@ def addConcern(current) :
 
 @app.route('/deleteConcern/<string:idConcern>', methods=['DELETE', 'OPTIONS'])
 def deleteConcern(idConcern) :
-    print idConcern
+    print (idConcern)
     deleteOneConcern(idConcern)
     return "deleteConcern was invoked"
 
 @app.route('/getConcerns/<string:current>', methods=['GET', 'OPTIONS'])
 def getConcerns(current):
-    print current
+    print (current)
     return json.dumps(getAllConcerns(current))
 
 if __name__ == '__main__':
