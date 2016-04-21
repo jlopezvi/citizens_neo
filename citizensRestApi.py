@@ -1,6 +1,7 @@
 from flask import Flask,jsonify,json
 from crossdomain import crossdomain
-from flask import request
+from flask import request, send_from_directory
+from flask.ext.assets import Environment, Bundle
 import ast
 import json
 from communityManager import saveCommunity,deleteCommunity,addCommunityToContact,getCommunities
@@ -9,7 +10,30 @@ from concernManager import addConcernToUser,deleteOneConcern,getAllConcerns
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
+assets = Environment(app)
+assets.init_app(app)
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')
+
+@app.route('/js/<path:path>')
+def send_js(path):
+    return send_from_directory(app.static_folder + '/js', path)
+
+@app.route('/css/<path:path>')
+def send_css(path):
+    return send_from_directory(app.static_folder + '/css', path)
+
+@app.route('/templates/<path:path>')
+def send_templates(path):
+    return send_from_directory(app.static_folder + '/templates', path)
+
+@app.route('/app/<path:path>')
+def send_app(path):
+    return send_from_directory(app.static_folder + '/app', path)
+
 
 @app.route('/addUser', methods=['POST', 'OPTIONS'])
 #@crossdomain(origin='*', headers=['Content-Type'])
@@ -47,7 +71,6 @@ def getAllCommunitiesForUser(email):
 def getUsers():
     return json.dumps(getAllUsers())
 
-
 @app.route('/addContact/<string:current>/<string:newContact>', methods=['POST', 'OPTIONS'])
 def addContact(current, newContact) :
     addContactToUser(current, newContact)
@@ -69,7 +92,6 @@ def deleteConcern(idConcern) :
 def getConcerns(current):
     print current
     return json.dumps(getAllConcerns(current))
-       
 
 if __name__ == '__main__':
     app.debug = True

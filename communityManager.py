@@ -39,7 +39,7 @@ def __addToCommunityIndex(name, newCommunity) :
 
 def __newCommunity(community):
     name = community.get('name')
-    newCommunity, = getGraph().create({"name" : name, "description" : community.get('description')})
+    newCommunity = getGraph().create({"name" : name, "description" : community.get('description')})
     __addToCommunityIndex(name, newCommunity)
 
 

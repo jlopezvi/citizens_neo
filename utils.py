@@ -6,4 +6,4 @@ class NotFoundError(Exception):
          return repr(self.value)
 
 def getGraph() :
-     return neo4j.GraphDatabaseService("http://localhost:7474/db/data")
+     return neo4j.GraphDatabaseService("http://127.0.0.1:7474/db/data")

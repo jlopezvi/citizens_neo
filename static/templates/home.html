@@ -1,0 +1,34 @@
+<div class="jumbotron" ng-controller="HomeController as vm">
+   <h1>Users list</h1>
+   <p class="lead">
+       Current list of all users in the database
+   </p>
+    <table class="table" ng-if="vm.users.length">
+        <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Address
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in vm.users">
+            <td>
+                {{ user.name }}
+            </td>
+            <td>
+                {{ user.email }}
+            </td>
+            <td>
+                {{ user.city }} <span ng-if="user.country">, {{ user.country }}</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
