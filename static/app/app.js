@@ -17,8 +17,14 @@ CitizensNeo.config(function ($httpProvider, $routeProvider) {
         return str.join("&");
     };
 
-    $routeProvider.when('/home', {
-        templateUrl: 'templates/home.html',
-        controller: 'HomeController'
-    }).otherwise({redirectTo: '/home'});
+    $routeProvider
+        .when('/login', {
+            templateUrl: 'templates/login.html',
+            controller: 'LoginController'
+        })
+        .when('/home', {
+            templateUrl: 'templates/home.html',
+            controller: 'HomeController'
+        })
+        .otherwise({redirectTo: '/login'});
 });
