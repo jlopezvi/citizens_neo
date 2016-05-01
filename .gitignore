@@ -4,4 +4,4 @@ bower_components/
 __pycache__/
 .idea/
 .pyc
-
+*.pyc
