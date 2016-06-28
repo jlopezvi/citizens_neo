@@ -48,7 +48,7 @@ def send_app(path):
 def sign_in_twitter():
     global OAUTH_TOKEN, OAUTH_TOKEN_SECRET
     twitter = Twython(APP_KEY, APP_SECRET)
-    auth = twitter.get_authentication_tokens(callback_url='http://127.0.0.01:5000/oauth')
+    auth = twitter.get_authentication_tokens(callback_url='http://127.0.0.1:5000/oauth')
 
     OAUTH_TOKEN = auth['oauth_token']
     OAUTH_TOKEN_SECRET = auth['oauth_token_secret']
