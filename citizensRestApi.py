@@ -1,18 +1,24 @@
-from flask import Flask,jsonify,json
+from flask import Flask, jsonify, json
 from crossdomain import crossdomain
 from flask import request, send_from_directory
 from flask.ext.assets import Environment, Bundle
 import ast
-import json
-from communityManager import saveCommunity,deleteCommunity,addCommunityToContact,getCommunities
-from userManagement import deleteUser,getAllUsers,saveUser,addContactToUser,getContacts
-from concernManager import addConcernToUser,deleteOneConcern,getAllConcerns
+import json, requests
+from twython import Twython
+from communityManager import saveCommunity, deleteCommunity, addCommunityToContact, getCommunities
+from userManagement import deleteUser, getAllUsers, saveUser, addContactToUser, getContacts
+from concernManager import addConcernToUser, deleteOneConcern, getAllConcerns
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__, static_folder='static')
 assets = Environment(app)
 assets.init_app(app)
+
+APP_KEY = 'HhTmHEyWuutW83qtXTPzOM4zt'
+APP_SECRET = 'VgDdNCHtIS0OYi9kh9BNZDu0Rvot7Y6kGf8GCXNUxPXf0BwVEz'
+OAUTH_TOKEN = ''
+OAUTH_TOKEN_SECRET = ''
 
 @app.route('/')
 def root():
@@ -30,23 +36,69 @@ def send_css(path):
 def send_templates(path):
     return send_from_directory(app.static_folder + '/templates', path)
 
+@app.route('/images/<path:path>')
+def send_images(path):
+    return send_from_directory(app.static_folder + '/images', path)
+
 @app.route('/app/<path:path>')
 def send_app(path):
     return send_from_directory(app.static_folder + '/app', path)
 
+@app.route('/sign-in-twitter', methods=['POST'])
+def sign_in_twitter():
+    global OAUTH_TOKEN, OAUTH_TOKEN_SECRET
+    twitter = Twython(APP_KEY, APP_SECRET)
+    auth = twitter.get_authentication_tokens(callback_url='http://127.0.0.01:5000/oauth')
+
+    OAUTH_TOKEN = auth['oauth_token']
+    OAUTH_TOKEN_SECRET = auth['oauth_token_secret']
+
+    response = jsonify(auth)
+    return response
+
+@app.route('/oauth', methods=['GET'])
+def oauth():
+    oauth_verifier = request.args.get('oauth_verifier')
+    global OAUTH_TOKEN, OAUTH_TOKEN_SECRET
+
+    twitter = Twython(APP_KEY, APP_SECRET,
+                      OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+    final_step = twitter.get_authorized_tokens(oauth_verifier)
+
+    OAUTH_TOKEN = final_step['oauth_token']
+    OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
+
+    response = jsonify(final_step)
+
+    return response
+
+@app.route("/tweet")
+def tweet():
+
+    t = Twython(
+        app_key=APP_KEY,
+        app_secret=APP_SECRET,
+        oauth_token=OAUTH_TOKEN,
+        oauth_token_secret=OAUTH_TOKEN_SECRET
+    )
+
+    status_update = t.update_status(status=request.args['status'])
+    response = jsonify(status_update)
+
+    return response
 
 @app.route('/addUser', methods=['POST', 'OPTIONS'])
 #@crossdomain(origin='*', headers=['Content-Type'])
-def getUser():
+def get_user():
     return saveUser(request.get_json())
   
 @app.route('/addCommunity', methods=['POST', 'OPTIONS'])
-def addComunity():
+def add_comunity():
     return saveCommunity(request.get_json())
 
 @app.route('/addCommunityToUser/<string:name>/<string:email>', methods=['POST', 'OPTIONS'])
-def addCommunityToUser(name, email) :
-    addCommunityToContact(name, email)
+def add_community_to_user(name, email) :
+    add_community_to_contact(name, email)
     return "Community %s was added to user with email %s" % (name, email)
 
 @app.route('/delete/community/<string:name>', methods=['DELETE', 'OPTIONS'])

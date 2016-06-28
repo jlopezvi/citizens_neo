@@ -5,19 +5,15 @@
         .controller('LoginController', ['$timeout', '$http', function($timeout, $http) {
             var vm = this;
 
-            vm.username = '';
-            vm.password = '';
+            vm.response = '';
 
-            vm.post = function () {
-                var data = $.param({
-                    json: JSON.stringify({
-                        username: vm.username,
-                        password: vm.password
-                    })
-                });
-
-                $http.post('/login', data).success(function (response) {
-
+            vm.signInTwitter = function () {
+                $http.post('/sign-in-twitter', {}).success(function (res) {
+                    if (typeof res.auth_url !== 'undefined') {
+                        $http.jsonp(res.auth_url).success(function (response) {
+                            vm.response = response;
+                        });
+                    }
                 });
             }
         }]);

@@ -5,7 +5,7 @@
  */
 var CitizensNeo = angular.module('citizensNeoApp', ['ngRoute']);
 
-CitizensNeo.config(function ($httpProvider, $routeProvider) {
+CitizensNeo.config(function ($httpProvider, $routeProvider, $locationProvider) {
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
     $httpProvider.defaults.transformRequest = function(obj) {
@@ -27,4 +27,7 @@ CitizensNeo.config(function ($httpProvider, $routeProvider) {
             controller: 'HomeController'
         })
         .otherwise({redirectTo: '/login'});
+
+    // use the HTML5 History API
+    // $locationProvider.html5Mode(true);
 });
