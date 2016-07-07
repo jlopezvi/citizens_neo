@@ -2,10 +2,14 @@
     'use strict';
 
     angular.module('citizensNeoApp')
-        .controller('LoginController', ['$timeout', '$http', '$location', function($timeout, $http, $location) {
+        .controller('LoginController', ['$timeout', '$http', '$location', '$auth', function($timeout, $http, $location, $auth) {
             var vm = this;
 
             vm.response = '';
+
+            vm.authenticate = function (provider) {
+                $auth.authenticate(provider);
+            };
 
             vm.signInTwitter = function () {
                 $http.post('/sign-in-twitter?callback=signInTwitter', {}).success(function (res) {

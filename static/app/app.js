@@ -3,7 +3,7 @@
 /**
  * @namespace CitizensNeo
  */
-var CitizensNeo = angular.module('citizensNeoApp', ['ngRoute']);
+var CitizensNeo = angular.module('citizensNeoApp', ['ngRoute', 'satellizer']);
 
 CitizensNeo.config(function ($httpProvider, $routeProvider, $locationProvider) {
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
