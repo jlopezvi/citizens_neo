@@ -13,7 +13,8 @@ module.exports = function(grunt) {
                         'bower_components/jquery/dist/jquery.min.js',
                         'bower_components/angular-ui/build/angular-ui.min.js',
                         'bower_components/angular-bootstrap/ui-bootstrap.min.js',
-                        'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
+                        'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+                        'bower_components/satellizer/satellizer.min.js'
                     ],
                     nonull: true
                 }]
